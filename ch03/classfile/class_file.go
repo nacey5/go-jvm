@@ -2,9 +2,6 @@ package classfile
 
 import "fmt"
 
-type AttributeInfo struct {
-}
-
 type ClassFile struct {
 	//魔数
 	magic uint32
