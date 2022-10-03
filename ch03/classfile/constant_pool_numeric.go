@@ -92,3 +92,19 @@ func (this *ConstantNameAndTypeInfo) readInfo(reader *ClassReader) {
 	this.nameIndex = reader.readUint16()
 	this.descriptorIndex = reader.readUint16()
 }
+
+func (this *ConstantLongInfo) Value() int64 {
+	return this.val
+}
+func (this *ConstantDoubleInfo) Value() float64 {
+	return this.val
+}
+func (this *ConstantFloatInfo) Value() float32 {
+	return this.val
+}
+func (this *ConstantIntegerInfo) Value() int32 {
+	return this.val
+}
+func (this *ConstantUtf8Info) Str() string {
+	return this.str
+}

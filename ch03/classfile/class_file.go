@@ -47,19 +47,20 @@ func Parse(classData []byte) (classFile *ClassFile, err error) {
 func (this *ClassFile) read(reader *ClassReader) {
 	this.readAndCheckMagic(reader)
 	this.readAndCheckVersion(reader)
-	this.constantPool = reader.readConstantPool(reader)
+	this.constantPool = readConstantPool(reader)
 	this.accessFlags = reader.readUint16()
 	this.thisClass = reader.readUint16()
+	this.superClass = reader.readUint16()
 	this.interfaces = reader.readUint16s()
 	this.fields = readMembers(reader, this.constantPool)
 	this.methods = readMembers(reader, this.constantPool)
-	this.attributes = readAtttibutes(reader, this.constantPool)
+	this.attributes = readAttributes(reader, this.constantPool)
 }
 
 // 检查魔数
 func (this *ClassFile) readAndCheckMagic(reader *ClassReader) {
 	magic := reader.readUint32()
-	if magic != 0xCAFABABE {
+	if magic != 0xCAFEBABE {
 		panic("java.lang.ClassFormatError:magic!")
 	}
 }

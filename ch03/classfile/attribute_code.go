@@ -1,6 +1,6 @@
 package classfile
 
-// 边长属性，存放字节码中方法的相关信息
+// CodeAttribute 边长属性，存放字节码中方法的相关信息
 type CodeAttribute struct {
 	constantPool ConstantPool
 	//操作栈的最大深度
@@ -15,6 +15,7 @@ type CodeAttribute struct {
 	attributes []AttributeInfo
 }
 
+// ExceptionTableEntry 异常表实体类
 type ExceptionTableEntry struct {
 	startPc   uint16
 	endPc     uint16
@@ -48,4 +49,17 @@ func readExceptionTable(reader *ClassReader) []*ExceptionTableEntry {
 		}
 	}
 	return exceptionTable
+}
+
+func (this *ExceptionTableEntry) StartPc() uint16 {
+	return this.startPc
+}
+func (this *ExceptionTableEntry) EndPc() uint16 {
+	return this.endPc
+}
+func (this *ExceptionTableEntry) HandlerPc() uint16 {
+	return this.handlerPc
+}
+func (this *ExceptionTableEntry) CatchType() uint16 {
+	return this.catchType
 }

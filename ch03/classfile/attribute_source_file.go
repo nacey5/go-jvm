@@ -1,6 +1,6 @@
 package classfile
 
-// 可选定长属性
+// SourceFileAttribute 可选定长属性
 type SourceFileAttribute struct {
 	constantPool    ConstantPool
 	sourceFileIndex uint16

@@ -1,6 +1,6 @@
 package classfile
 
-// 定长属性
+// ConstantValueAttribute 定长属性
 type ConstantValueAttribute struct {
 	constantValueIndex uint16
 }

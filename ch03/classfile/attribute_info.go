@@ -1,5 +1,6 @@
 package classfile
 
+// AttributeInfo 属性信息
 type AttributeInfo interface {
 	readInfo(reader *ClassReader)
 }
@@ -25,7 +26,7 @@ func readAttribute(reader *ClassReader, constantPool ConstantPool) AttributeInfo
 func newAttributeInfo(attrName string, attrLen uint32, constantPool ConstantPool) AttributeInfo {
 	switch attrName {
 	case "Code":
-		return &CodeAttribute{}
+		return &CodeAttribute{constantPool: constantPool}
 	case "ConstantValue":
 		return &ConstantValueAttribute{}
 	case "Deprecated":
@@ -37,7 +38,7 @@ func newAttributeInfo(attrName string, attrLen uint32, constantPool ConstantPool
 	case "LocalVariableTable":
 		return &LocalVariableTableAttribute{}
 	case "SourceFile":
-		return &SourceFileAttribute{}
+		return &SourceFileAttribute{constantPool: constantPool}
 	case "Synthetic":
 		return &SyntheticAttribute{}
 	default:

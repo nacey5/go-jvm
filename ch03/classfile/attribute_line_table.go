@@ -23,4 +23,13 @@ func (this *LineNumberTableAttribute) readInfo(reader *ClassReader) {
 	}
 }
 
-//局部变量表信息
+// 得到行数
+func (this *LineNumberTableAttribute) GetLineNumber(pc int) int {
+	for i := len(this.lineNumberTable) - 1; i >= 0; i-- {
+		entry := this.lineNumberTable[i]
+		if pc >= int(entry.startPc) {
+			return int(entry.lineNumber)
+		}
+	}
+	return -1
+}

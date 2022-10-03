@@ -24,17 +24,17 @@ func readConstantInfo(reader *ClassReader, cp ConstantPool) ConstantInfo {
 func newConstantInfo(tag uint8, cp ConstantPool) ConstantInfo {
 	switch tag {
 	case CONSTANT_CLASS:
-		return &ConstantClassInfo{}
+		return &ConstantClassInfo{constantPool: cp}
 	case CONSTANT_DOUBLE:
 		return &ConstantDoubleInfo{}
 	case CONSTANT_FIELDREF:
-		return &ConstantFieldInfo{ConstantMemberRefInfo{constantPool: cp}}
+		return &ConstantFieldRefInfo{ConstantMemberRefInfo{constantPool: cp}}
 	case CONSTANT_FLOAT:
 		return &ConstantFloatInfo{}
 	case CONSTANT_INTEGER:
 		return &ConstantIntegerInfo{}
 	case CONSTANT_INTERFACEMETHODREF:
-		return &ConstantInterfaceMethodRefInfo{}
+		return &ConstantInterfaceMethodRefInfo{ConstantMemberRefInfo{constantPool: cp}}
 	case CONSTANT_INVOKEDYNAMIC:
 		return &ConstantInvokeDynamicInfo{}
 	case CONSTANT_LONG:
@@ -58,11 +58,11 @@ func newConstantInfo(tag uint8, cp ConstantPool) ConstantInfo {
 
 func readConstantPool(reader *ClassReader) ConstantPool {
 	cpCount := int(reader.readUint16())
-	cp := make([]constantInfo, cpCount)
+	cp := make([]ConstantInfo, cpCount)
 	for i := 1; i < cpCount; i++ {
 		cp[i] = readConstantInfo(reader, cp)
 		switch cp[i].(type) {
-		case *ConstantLongIngo, *ConstantDoubleInfo:
+		case *ConstantLongInfo, *ConstantDoubleInfo:
 			i++
 		}
 	}

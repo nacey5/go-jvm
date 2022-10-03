@@ -23,6 +23,7 @@ func readMembers(reader *ClassReader, constantPool ConstantPool) []*MemberInfo {
 func readMember(reader *ClassReader, constantPool ConstantPool) *MemberInfo {
 	return &MemberInfo{
 		constantPool:    constantPool,
+		accessFlags:     reader.readUint16(),
 		nameIndex:       reader.readUint16(),
 		descriptorIndex: reader.readUint16(),
 		attributes:      readAttributes(reader, constantPool),
