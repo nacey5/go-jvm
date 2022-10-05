@@ -9,6 +9,30 @@ type Frame struct {
 	operandStack *OperandStack
 }
 
+func (f *Frame) Lower() *Frame {
+	return f.lower
+}
+
+func (f *Frame) SetLower(lower *Frame) {
+	f.lower = lower
+}
+
+func (f *Frame) LocalVars() LocalVars {
+	return f.localVars
+}
+
+func (f *Frame) SetLocalVars(localVars LocalVars) {
+	f.localVars = localVars
+}
+
+func (f *Frame) OperandStack() *OperandStack {
+	return f.operandStack
+}
+
+func (f *Frame) SetOperandStack(operandStack *OperandStack) {
+	f.operandStack = operandStack
+}
+
 //func newFrame(maxLocals, maxStack uint) *Frame {
 //
 //}

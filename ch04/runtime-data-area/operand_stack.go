@@ -22,6 +22,7 @@ func newOperandStack(maxStack uint) *OperandStack {
 // 对int进行处理
 func (this *OperandStack) PushInt(val int32) {
 	this.slots[this.size].num = val
+	this.size++
 }
 func (this *OperandStack) PopInt() int32 {
 	this.size--

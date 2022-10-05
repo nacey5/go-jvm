@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"go-jvm/ch03/classfile"
 	"go-jvm/ch03/classpath"
-	"strings"
+	runtime_data_area "go-jvm/ch04/runtime-data-area"
 )
 
 func main() {
@@ -19,11 +19,43 @@ func main() {
 }
 
 func startJvm(cmd *Cmd) {
-	cp := classpath.Parse(cmd.xJreOption, cmd.cpOption)
-	className := strings.Replace(cmd.class, ".", "/", -1)
-	cf := loadClass(className, cp)
-	fmt.Println(cmd.class)
-	printClassInfo(cf)
+	frame := runtime_data_area.NewFrame(100, 100)
+	testLocalVars(frame.LocalVars())
+	testOperandStack(frame.OperandStack())
+}
+
+func testOperandStack(ops *runtime_data_area.OperandStack) {
+	ops.PushInt(100)
+	ops.PushInt(-100)
+	ops.PushLong(11601245522)
+	ops.PushLong(-11601245522)
+	ops.PushFloat(3.1415926)
+	ops.PushDouble(2.71828182845)
+	ops.PushRef(nil)
+	println(ops.PopRef())
+	println(ops.PopDouble())
+	println(ops.PopFloat())
+	println(ops.PopLong())
+	println(ops.PopLong())
+	println(ops.PopInt())
+	println(ops.PopInt())
+}
+
+func testLocalVars(vs runtime_data_area.LocalVars) {
+	vs.SetInt(0, 100)
+	vs.SetInt(1, -100)
+	vs.SetLong(2, 11601245522)
+	vs.SetLong(4, -11601245522)
+	vs.SetFloat(6, 3.1415926)
+	vs.SetDouble(7, 2.71828182845)
+	vs.SetRef(9, nil)
+	println(vs.GetInt(0))
+	println(vs.GetInt(1))
+	println(vs.GetLong(2))
+	println(vs.GetLong(4))
+	println(vs.GetFloat(6))
+	println(vs.GetDouble(7))
+	println(vs.GetRef(9))
 }
 
 func loadClass(className string, cp *classpath.Classpath) *classfile.ClassFile {
