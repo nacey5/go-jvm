@@ -15,6 +15,54 @@ type CodeAttribute struct {
 	attributes []AttributeInfo
 }
 
+func (this *CodeAttribute) ConstantPool() ConstantPool {
+	return this.constantPool
+}
+
+func (this *CodeAttribute) SetConstantPool(constantPool ConstantPool) {
+	this.constantPool = constantPool
+}
+
+func (this *CodeAttribute) MaxStack() uint16 {
+	return this.maxStack
+}
+
+func (this *CodeAttribute) SetMaxStack(maxStack uint16) {
+	this.maxStack = maxStack
+}
+
+func (this *CodeAttribute) MaxLocals() uint16 {
+	return this.maxLocals
+}
+
+func (this *CodeAttribute) SetMaxLocals(maxLocals uint16) {
+	this.maxLocals = maxLocals
+}
+
+func (this *CodeAttribute) Code() []byte {
+	return this.code
+}
+
+func (this *CodeAttribute) SetCode(code []byte) {
+	this.code = code
+}
+
+func (this *CodeAttribute) ExceptionTable() []*ExceptionTableEntry {
+	return this.exceptionTable
+}
+
+func (this *CodeAttribute) SetExceptionTable(exceptionTable []*ExceptionTableEntry) {
+	this.exceptionTable = exceptionTable
+}
+
+func (this *CodeAttribute) Attributes() []AttributeInfo {
+	return this.attributes
+}
+
+func (this *CodeAttribute) SetAttributes(attributes []AttributeInfo) {
+	this.attributes = attributes
+}
+
 // ExceptionTableEntry 异常表实体类
 type ExceptionTableEntry struct {
 	startPc   uint16

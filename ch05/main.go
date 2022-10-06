@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
-	"go-jvm/ch03/classfile"
-	"go-jvm/ch03/classpath"
-	runtime_data_area "go-jvm/ch04/runtime-data-area"
+	"go-jvm/ch05/classfile"
+	"go-jvm/ch05/classpath"
+	runtime_data_area "go-jvm/ch05/runtime-data-area"
+	"strings"
 )
 
 func main() {
@@ -18,10 +19,27 @@ func main() {
 	}
 }
 
+// startJVM首先调用loadClass方法并解析class文件，然后调用getMainMethod()函数查找类的main方法,最后调用main方法
 func startJvm(cmd *Cmd) {
-	frame := runtime_data_area.NewFrame(100, 100)
-	testLocalVars(frame.LocalVars())
-	testOperandStack(frame.OperandStack())
+	cp := classpath.Parse(cmd.xJreOption, cmd.cpOption)
+	className := strings.Replace(cmd.class, ".", "/", -1)
+	cf := loadClass(className, cp)
+	mainMethod := getMainMethod(cf)
+	if mainMethod != nil {
+		interpret(mainMethod)
+	} else {
+		fmt.Printf("Main method not found in class %s\n", cmd.class)
+	}
+}
+
+func getMainMethod(cf *classfile.ClassFile) *classfile.MemberInfo {
+	for _, m := range cf.Methods() {
+
+		if m.Name() == "main" && m.Descriptor() == "([Ljava/lang/String;)V" {
+			return m
+		}
+	}
+	return nil
 }
 
 func testOperandStack(ops *runtime_data_area.OperandStack) {

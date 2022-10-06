@@ -6,22 +6,22 @@ import (
 )
 
 type IF_ICMPEQ struct {
-	base.NoOperandsInstruction
+	base.BranchInstruction
 }
 type IF_ICMPNE struct {
-	base.NoOperandsInstruction
+	base.BranchInstruction
 }
 type IF_ICMPLT struct {
-	base.NoOperandsInstruction
+	base.BranchInstruction
 }
 type IF_ICMPLE struct {
-	base.NoOperandsInstruction
+	base.BranchInstruction
 }
 type IF_ICMPGT struct {
-	base.NoOperandsInstruction
+	base.BranchInstruction
 }
 type IF_ICMPGE struct {
-	base.NoOperandsInstruction
+	base.BranchInstruction
 }
 
 func (self *IF_ICMPEQ) Execute(frame *runtime_data_area.Frame) {

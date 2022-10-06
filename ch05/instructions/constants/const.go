@@ -56,11 +56,11 @@ func (this *ACONST_NULL) Execute(frame *runtime_data_area.Frame) {
 	frame.OperandStack().PushRef(nil)
 }
 
-func (this *DCONST_0) Execute(frame runtime_data_area.Frame) {
+func (this *DCONST_0) Execute(frame *runtime_data_area.Frame) {
 	frame.OperandStack().PushDouble(0.0)
 }
 
-func (this *ICONST_M1) Execute(frame runtime_data_area.Frame) {
+func (this *ICONST_M1) Execute(frame *runtime_data_area.Frame) {
 	frame.OperandStack().PushInt(-1)
 }
 func (this *DCONST_1) Execute(frame *runtime_data_area.Frame) {

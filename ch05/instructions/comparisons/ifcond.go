@@ -6,26 +6,26 @@ import (
 )
 
 type IFEQ struct {
-	base.NoOperandsInstruction
+	base.BranchInstruction
 }
 type IFNE struct {
-	base.NoOperandsInstruction
+	base.BranchInstruction
 }
 
 type IFLT struct {
-	base.NoOperandsInstruction
+	base.BranchInstruction
 }
 
 type IFLE struct {
-	base.NoOperandsInstruction
+	base.BranchInstruction
 }
 
 type IFGT struct {
-	base.NoOperandsInstruction
+	base.BranchInstruction
 }
 
 type IFGE struct {
-	base.NoOperandsInstruction
+	base.BranchInstruction
 }
 
 func (this *IFEQ) Execute(frame *runtime_data_area.Frame) {
@@ -34,33 +34,33 @@ func (this *IFEQ) Execute(frame *runtime_data_area.Frame) {
 		base.Branch(frame, this.Offset)
 	}
 }
-func (self *IFNE) Execute(frame *runtime_data_area.Frame) {
+func (this *IFNE) Execute(frame *runtime_data_area.Frame) {
 	val := frame.OperandStack().PopInt()
 	if val != 0 {
-		base.Branch(frame, self.Offset)
+		base.Branch(frame, this.Offset)
 	}
 }
-func (self *IFLT) Execute(frame *runtime_data_area.Frame) {
+func (this *IFLT) Execute(frame *runtime_data_area.Frame) {
 	val := frame.OperandStack().PopInt()
 	if val < 0 {
-		base.Branch(frame, self.Offset)
+		base.Branch(frame, this.Offset)
 	}
 }
-func (self *IFLE) Execute(frame *runtime_data_area.Frame) {
+func (this *IFLE) Execute(frame *runtime_data_area.Frame) {
 	val := frame.OperandStack().PopInt()
 	if val <= 0 {
-		base.Branch(frame, self.Offset)
+		base.Branch(frame, this.Offset)
 	}
 }
-func (self *IFGT) Execute(frame *runtime_data_area.Frame) {
+func (this *IFGT) Execute(frame *runtime_data_area.Frame) {
 	val := frame.OperandStack().PopInt()
 	if val > 0 {
-		base.Branch(frame, self.Offset)
+		base.Branch(frame, this.Offset)
 	}
 }
-func (self *IFGE) Execute(frame *runtime_data_area.Frame) {
+func (this *IFGE) Execute(frame *runtime_data_area.Frame) {
 	val := frame.OperandStack().PopInt()
 	if val >= 0 {
-		base.Branch(frame, self.Offset)
+		base.Branch(frame, this.Offset)
 	}
 }

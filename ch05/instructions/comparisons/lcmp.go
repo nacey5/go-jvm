@@ -10,7 +10,7 @@ type LCMP struct {
 	base.NoOperandsInstruction
 }
 
-func (this *LCMP) Execute(frame runtime_data_area.Frame) {
+func (this *LCMP) Execute(frame *runtime_data_area.Frame) {
 	stack := frame.OperandStack()
 	v2 := stack.PopLong()
 	v1 := stack.PopLong()

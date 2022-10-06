@@ -37,3 +37,7 @@ func (this *Thread) PopFrame() *Frame {
 func (this *Thread) CurrentFrame() *Frame {
 	return this.stack.pop()
 }
+
+func (this *Thread) NewFrame(maxLocals, maxStack uint) *Frame {
+	return NewFrame(this, maxLocals, maxStack)
+}

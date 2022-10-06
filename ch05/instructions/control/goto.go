@@ -6,7 +6,7 @@ import (
 )
 
 type GOTO struct {
-	base.NoOperandsInstruction
+	base.BranchInstruction
 }
 
 func (this *GOTO) Execute(frame *runtime_data_area.Frame) {
