@@ -10,7 +10,7 @@ type Class struct {
 	name              string
 	superClassName    string
 	interfaceNames    []string
-	constantPool      *classfile.ConstantPool
+	constantPool      *ConstantPool
 	fields            []*Field
 	methods           []*Method
 	loader            *ClassLoader
