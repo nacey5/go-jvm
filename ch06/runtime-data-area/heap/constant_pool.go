@@ -26,7 +26,7 @@ func newConstantPool(class *Class, cfCp classfile.ConstantPool) *ConstantPool {
 	for i := 1; i < cpCount; i++ {
 		cpInfo := cfCp[i]
 		switch cpInfo.(type) {
-		//TODO
+
 		case *classfile.ConstantIntegerInfo:
 			intInfo := cpInfo.(*classfile.ConstantIntegerInfo)
 			consts[i] = intInfo.Value()

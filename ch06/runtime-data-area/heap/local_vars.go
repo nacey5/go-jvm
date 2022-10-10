@@ -1,6 +1,8 @@
-package runtime_data_area
+package heap
 
-import "math"
+import (
+	"math"
+)
 
 type LocalVars []Slot
 

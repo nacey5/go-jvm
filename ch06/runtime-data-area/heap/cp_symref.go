@@ -9,3 +9,20 @@ type SymRef struct {
 	className string
 	class     *Class
 }
+
+func (this *SymRef) ResolvedClass() *Class {
+	if this.class == nil {
+		this.resolveClassRef()
+	}
+	return this.class
+}
+
+// 如果符号已经被引用，直接返回类指针，否则调用resolveClassRef()方法解析
+func (this *SymRef) resolveClassRef() {
+	d := this.cp.class
+	c := d.loader.LoadClass(this.className)
+	if !c.isAccessibleTo(d) {
+		panic("java.lang.IllegalAccessError")
+	}
+	this.class = c
+}

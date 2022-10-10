@@ -1,6 +1,9 @@
 package heap
 
-import "go-jvm/ch06/classfile"
+import (
+	"go-jvm/ch06/classfile"
+	"strings"
+)
 
 // 表示要放进方法区的类
 type Class struct {
@@ -18,7 +21,7 @@ type Class struct {
 	interfaces        []*Class
 	instanceSlotCount uint
 	staticSlotCount   uint
-	staticVars        *Slots
+	staticVars        Slots
 }
 
 func newClass(cf *classfile.ClassFile) *Class {
@@ -56,4 +59,51 @@ func (self *Class) IsAnnotation() bool {
 }
 func (self *Class) IsEnum() bool {
 	return 0 != self.accessFlags&ACC_ENUM
+}
+
+// getters
+func (this *Class) ConstantPool() *ConstantPool {
+	return this.constantPool
+}
+func (this *Class) StaticVars() Slots {
+	return this.staticVars
+}
+
+// 如果D想要访问C，必须满足：C是public或者C和D在同一个包中
+func (this *Class) isAccessibleTo(other *Class) bool {
+	return this.IsPublic() || this.getPackageName() == other.getPackageName()
+}
+
+func (this *Class) getPackageName() string {
+	if i := strings.LastIndex(this.name, "/"); i >= 0 {
+		return this.name[:i]
+	}
+	return ""
+}
+
+func (this *Class) NewObject() *Object {
+	return newObject(this)
+}
+
+func (this *Class) GetMainMethod() *Method {
+	return this.getStaticMethod("main", "([Ljava/lang/String;)V")
+}
+
+func (this *Class) getStaticMethod(name, descriptor string) *Method {
+	for _, method := range this.methods {
+		if method.IsStatic() &&
+			method.name == name &&
+			method.descriptor == descriptor {
+
+			return method
+		}
+	}
+	return nil
+}
+
+func newObject(class *Class) *Object {
+	return &Object{
+		class:  class,
+		fields: newSlots(class.instanceSlotCount),
+	}
 }

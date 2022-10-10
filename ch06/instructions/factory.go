@@ -14,7 +14,6 @@ import (
 	"go-jvm/ch05/instructions/stores"
 )
 
-// TODO 单例常量
 var (
 	nop         = &constants.NOP{}
 	aconst_null = &constants.ACONST_NULL{}

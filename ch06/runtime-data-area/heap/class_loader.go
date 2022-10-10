@@ -2,6 +2,7 @@ package heap
 
 import (
 	"fmt"
+	"go-jvm/ch06/classfile"
 	"go-jvm/ch06/classpath"
 )
 
@@ -46,4 +47,94 @@ func (this *ClassLoader) readClass(name string) ([]byte, classpath.Entry) {
 		panic("java.lang.ClassNotFoundException:" + name)
 	}
 	return data, entry
+}
+
+func (this *ClassLoader) defineClass(data []byte) *Class {
+	class := parseClass(data)
+	class.loader = this
+	resolveSuperClass(class)
+	resolveInterfaces(class)
+	this.classMap[class.name] = class
+	return class
+}
+
+func parseClass(data []byte) *Class {
+	cf, err := classfile.Parse(data)
+	if err != nil {
+		//panic("java.lang.ClassFormatError")
+		panic(err)
+	}
+	return newClass(cf)
+}
+
+func resolveSuperClass(class *Class) {
+	if class.name != "java/lang/Object" {
+		class.superClass = class.loader.LoadClass(class.superClassName)
+	}
+}
+func resolveInterfaces(class *Class) {
+	interfaceCount := len(class.interfaceNames)
+	if interfaceCount > 0 {
+		class.interfaces = make([]*Class, interfaceCount)
+		for i, interfaceName := range class.interfaceNames {
+			class.interfaces[i] = class.loader.LoadClass(interfaceName)
+		}
+	}
+}
+
+func link(class *Class) {
+	verify(class)
+	prepare(class)
+}
+
+func verify(class *Class) {
+	// todo
+}
+
+func prepare(class *Class) {
+	calcInstanceFieldSlotIds(class)
+	calStaticFieldSlotIds(class)
+	allocAndInitStaticVars(class)
+}
+
+// 计算静态函数变量,同时给予编号
+func calStaticFieldSlotIds(class *Class) {
+	slotId := uint(0)
+	for _, field := range class.fields {
+		if field.IsStatic() {
+			field.slotId = slotId
+			slotId++
+			if field.isLongOrDouble() {
+				slotId++
+			}
+		}
+	}
+	class.staticSlotCount = slotId
+}
+
+// 计算实例字段的个数，同时给予编号
+func calcInstanceFieldSlotIds(class *Class) {
+	slotId := uint(0)
+	if class.superClass != nil {
+		slotId = class.superClass.instanceSlotCount
+	}
+	for _, field := range class.fields {
+		if !field.IsStatic() {
+			field.slotId = slotId
+			slotId++
+			if field.isLongOrDouble() {
+				slotId++
+			}
+		}
+	}
+	class.instanceSlotCount = slotId
+}
+
+func allocAndInitStaticVars(class *Class) {
+	class.staticVars = newSlots(class.staticSlotCount)
+	for _, field := range class.fields {
+		if field.IsStatic() && field.IsFinal() {
+			initStaticFinalVar(class, field)
+		}
+	}
 }
