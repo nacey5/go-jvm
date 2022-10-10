@@ -12,34 +12,34 @@ type PUT_STATIC struct {
 
 func (this *PUT_STATIC) Execute(frame runtime_data_area.Frame) {
 	currentMethod := frame.Method()
-	currentClass := frame.Class()
+	currentClass := currentMethod.Class()
 	cp := currentClass.ConstantPool()
 	fieldRef := cp.GetConstant(this.Index).(*heap.FieldRef)
-	field := fieldRef.ResolveField()
+	field := fieldRef.ResolvedField()
 	class := field.Class()
 	//先拿到当前的方法，常量池，然后解析符号
 	if !field.IsStatic() {
 		panic("java.lang.IncompatibleClassChangeError")
 	}
-	if field.isFinal() {
+	if field.IsFinal() {
 		if currentClass != class || currentMethod.Name() != "<clinit>" {
 			panic("java.lang.IllegalAccessError")
 		}
 	}
 	description := field.Descriptor()
 	slotId := field.SlotId()
-	slots = class.StaticVars()
+	slots := class.StaticVars()
 	stack := frame.OperandStack()
 	switch description[0] {
-	case "Z", "B", "C", "S", "I":
+	case 'Z', 'B', 'C', 'S', 'I':
 		slots.SetInt(slotId, stack.PopInt())
-	case "F":
+	case 'F':
 		slots.SetFloat(slotId, stack.PopFloat())
-	case "J":
+	case 'J':
 		slots.SetLong(slotId, stack.PopLong())
-	case "D":
+	case 'D':
 		slots.SetDouble(slotId, stack.PopDouble())
-	case "L", "[":
+	case 'L', '[':
 		slots.SetRef(slotId, stack.PopRef())
 	}
 }

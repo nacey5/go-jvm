@@ -82,15 +82,6 @@ func resolveInterfaces(class *Class) {
 	}
 }
 
-func link(class *Class) {
-	verify(class)
-	prepare(class)
-}
-
-func verify(class *Class) {
-	// todo
-}
-
 func prepare(class *Class) {
 	calcInstanceFieldSlotIds(class)
 	calStaticFieldSlotIds(class)

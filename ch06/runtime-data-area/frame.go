@@ -1,5 +1,7 @@
 package runtime_data_area
 
+import "go-jvm/ch06/runtime-data-area/heap"
+
 // lower用来实现链表结构
 // localVars字段保存局部变量指针
 // operandStack 保存操作数栈指针
@@ -8,6 +10,7 @@ type Frame struct {
 	localVars    LocalVars
 	operandStack *OperandStack
 	thread       *Thread
+	method       *heap.Method
 	nextPC       int
 }
 
@@ -61,4 +64,8 @@ func NewFrame(thread *Thread, maxLocals, maxStack uint) *Frame {
 		localVars:    newLocalVars(maxLocals),
 		operandStack: newOperandStack(maxStack),
 	}
+}
+
+func (this *Frame) Method() *heap.Method {
+	return this.method
 }

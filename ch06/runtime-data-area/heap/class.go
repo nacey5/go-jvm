@@ -100,10 +100,3 @@ func (this *Class) getStaticMethod(name, descriptor string) *Method {
 	}
 	return nil
 }
-
-func newObject(class *Class) *Object {
-	return &Object{
-		class:  class,
-		fields: newSlots(class.instanceSlotCount),
-	}
-}
