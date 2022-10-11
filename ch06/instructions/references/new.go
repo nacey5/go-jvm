@@ -1,7 +1,7 @@
 package references
 
 import (
-	"go-jvm/ch05/instructions/base"
+	"go-jvm/ch06/instructions/base"
 	runtime_data_area "go-jvm/ch06/runtime-data-area"
 	"go-jvm/ch06/runtime-data-area/heap"
 )

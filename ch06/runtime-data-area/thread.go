@@ -1,5 +1,7 @@
 package runtime_data_area
 
+import "go-jvm/ch06/runtime-data-area/heap"
+
 // Thread 线程结构体
 type Thread struct {
 	//pc机
@@ -38,6 +40,6 @@ func (this *Thread) CurrentFrame() *Frame {
 	return this.stack.pop()
 }
 
-func (this *Thread) NewFrame(maxLocals, maxStack uint) *Frame {
-	return NewFrame(this, maxLocals, maxStack)
+func (this *Thread) NewFrame(method *heap.Method) *Frame {
+	return NewFrame(this, method)
 }

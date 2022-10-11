@@ -14,3 +14,16 @@ func newMethodRef(cp *ConstantPool, refInfo *classfile.ConstantMethodRefInfo) *M
 	ref.copyMemberRefInfo(&refInfo.ConstantMemberRefInfo)
 	return ref
 }
+
+func (this *MethodRef) ResolvedMethod() *Method {
+	if this.method == nil {
+		this.resolveMethodRef()
+	}
+	return this.method
+}
+
+// jvms8 5.4.3.3
+func (this *MethodRef) resolveMethodRef() {
+	//class := self.Class()
+	// todo
+}

@@ -62,8 +62,8 @@ func (this *Field) ConstValueIndex() uint {
 func (this *Field) SlotId() uint {
 	return this.slotId
 }
-func (self *Field) isLongOrDouble() bool {
-	return self.descriptor == "J" || self.descriptor == "D"
+func (this *Field) isLongOrDouble() bool {
+	return this.descriptor == "J" || this.descriptor == "D"
 }
 
 func (this *Field) copyAttributes(cfField *classfile.MemberInfo) {
@@ -97,4 +97,34 @@ func initStaticFinalVar(class *Class, field *Field) {
 			panic("todo")
 		}
 	}
+}
+
+func (this *Method) IsSynchronized() bool {
+	return 0 != this.accessFlags&ACC_SYNCHRONIZED
+}
+func (this *Method) IsBridge() bool {
+	return 0 != this.accessFlags&ACC_BRIDGE
+}
+func (this *Method) IsVarargs() bool {
+	return 0 != this.accessFlags&ACC_VARARGS
+}
+func (this *Method) IsNative() bool {
+	return 0 != this.accessFlags&ACC_NATIVE
+}
+func (this *Method) IsAbstract() bool {
+	return 0 != this.accessFlags&ACC_ABSTRACT
+}
+func (this *Method) IsStrict() bool {
+	return 0 != this.accessFlags&ACC_STRICT
+}
+
+// getters
+func (this *Method) MaxStack() uint {
+	return uint(this.maxStack)
+}
+func (this *Method) MaxLocals() uint {
+	return uint(this.maxLocals)
+}
+func (this *Method) Code() []byte {
+	return this.code
 }

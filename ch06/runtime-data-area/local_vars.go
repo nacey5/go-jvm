@@ -1,6 +1,9 @@
 package runtime_data_area
 
-import "math"
+import (
+	"go-jvm/ch06/runtime-data-area/heap"
+	"math"
+)
 
 type LocalVars []Slot
 
@@ -57,10 +60,10 @@ func (this LocalVars) GetDouble(index uint) float64 {
 }
 
 // SetRef 对引用值进行处理
-func (this LocalVars) SetRef(index uint, ref *Object) {
+func (this LocalVars) SetRef(index uint, ref *heap.Object) {
 	this[index].ref = ref
 }
 
-func (this LocalVars) GetRef(index uint) *Object {
+func (this LocalVars) GetRef(index uint) *heap.Object {
 	return this[index].ref
 }

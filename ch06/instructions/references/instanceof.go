@@ -11,7 +11,7 @@ type INSTANCE_OF struct {
 }
 
 // 判断引用类型，如果obj==null的时候，if全为false
-func (this *INSTANCE_OF) Execute(frame runtime_data_area.Frame) {
+func (this *INSTANCE_OF) Execute(frame *runtime_data_area.Frame) {
 	stack := frame.OperandStack()
 	ref := stack.PopRef()
 	if ref == nil {

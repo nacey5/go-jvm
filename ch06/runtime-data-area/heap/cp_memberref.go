@@ -12,3 +12,10 @@ func (this *MemberRef) copyMemberRefInfo(refInfo *classfile.ConstantMemberRefInf
 	this.className = refInfo.ClassName()
 	this.name, this.descriptor = refInfo.NameAndDescriptor()
 }
+
+func (this *MemberRef) Name() string {
+	return this.name
+}
+func (this *MemberRef) Descriptor() string {
+	return this.descriptor
+}

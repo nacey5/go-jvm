@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
-	"go-jvm/ch05/classfile"
-	"go-jvm/ch05/classpath"
-	runtime_data_area "go-jvm/ch05/runtime-data-area"
+	"go-jvm/ch06/classfile"
+	"go-jvm/ch06/classpath"
+	runtime_data_area "go-jvm/ch06/runtime-data-area"
+	"go-jvm/ch06/runtime-data-area/heap"
 	"strings"
 )
 
@@ -19,12 +20,14 @@ func main() {
 	}
 }
 
-// startJVM首先调用loadClass方法并解析class文件，然后调用getMainMethod()函数查找类的main方法,最后调用main方法
+// 先创建classLoader实例，然后用它加载朱磊
 func startJvm(cmd *Cmd) {
 	cp := classpath.Parse(cmd.xJreOption, cmd.cpOption)
+	classLoader := heap.NewClassLoader(cp)
 	className := strings.Replace(cmd.class, ".", "/", -1)
-	cf := loadClass(className, cp)
-	mainMethod := getMainMethod(cf)
+	mainClass := classLoader.LoadClass(className)
+	mainMethod := mainClass.GetMainMethod()
+
 	if mainMethod != nil {
 		interpret(mainMethod)
 	} else {

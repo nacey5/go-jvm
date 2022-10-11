@@ -1,8 +1,8 @@
 package control
 
 import (
-	"go-jvm/ch05/instructions/base"
-	runtime_data_area "go-jvm/ch05/runtime-data-area"
+	"go-jvm/ch06/instructions/base"
+	runtime_data_area "go-jvm/ch06/runtime-data-area"
 )
 
 type LOOKUP_SWITCH struct {

@@ -48,7 +48,7 @@ func newConstantInfo(tag uint8, cp ConstantPool) ConstantInfo {
 	case CONSTANT_NAMEANDTYPE:
 		return &ConstantNameAndTypeInfo{}
 	case CONSTANT_STRING:
-		return &ConstantStringInfo{}
+		return &ConstantStringInfo{constantPool: cp}
 	case CONSTANT_UTF8:
 		return &ConstantUtf8Info{}
 	default:

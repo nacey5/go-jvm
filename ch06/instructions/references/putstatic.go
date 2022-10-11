@@ -1,7 +1,7 @@
 package references
 
 import (
-	"go-jvm/ch05/instructions/base"
+	"go-jvm/ch06/instructions/base"
 	runtime_data_area "go-jvm/ch06/runtime-data-area"
 	"go-jvm/ch06/runtime-data-area/heap"
 )
@@ -10,7 +10,7 @@ type PUT_STATIC struct {
 	base.Index16Instruction
 }
 
-func (this *PUT_STATIC) Execute(frame runtime_data_area.Frame) {
+func (this *PUT_STATIC) Execute(frame *runtime_data_area.Frame) {
 	currentMethod := frame.Method()
 	currentClass := currentMethod.Class()
 	cp := currentClass.ConstantPool()

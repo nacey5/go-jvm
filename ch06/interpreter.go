@@ -2,25 +2,21 @@ package main
 
 import (
 	"fmt"
-	"go-jvm/ch05/classfile"
-	"go-jvm/ch05/instructions"
-	"go-jvm/ch05/instructions/base"
-	runtime_data_area "go-jvm/ch05/runtime-data-area"
+	"go-jvm/ch06/instructions"
+	"go-jvm/ch06/instructions/base"
+	runtime_data_area "go-jvm/ch06/runtime-data-area"
+	"go-jvm/ch06/runtime-data-area/heap"
 )
 
 // 解释器
 // interpret 的参数是MemberInfo指针
-func interpret(methodInfo *classfile.MemberInfo) {
-	codeAttr := methodInfo.CodeAttribute()
-	maxLocals := codeAttr.MaxLocals()
-	maxStack := codeAttr.MaxStack()
-	bytecode := codeAttr.Code()
+func interpret(method *heap.Method) {
 	//创建一个Thread实例，然后创建一个帧并把它推入java虚拟机栈中
 	thread := runtime_data_area.NewThread()
-	frame := thread.NewFrame(uint(maxLocals), uint(maxStack))
+	frame := thread.NewFrame(method)
 	thread.PushFrame(frame)
 	defer catchErr(frame)
-	loop(thread, bytecode)
+	loop(thread, method.Code())
 }
 
 func loop(thread *runtime_data_area.Thread, bytecode []byte) {
