@@ -14,3 +14,19 @@ func newInterfaceMethodRef(cp *ConstantPool, refInfo *classfile.ConstantInterfac
 	ref.copyMemberRefInfo(&refInfo.ConstantMemberRefInfo)
 	return ref
 }
+
+func (this *InterfaceMethodRef) resolveInterfaceMethodRef() {
+	d := this.cp.class
+	c := this.ResolvedClass()
+	if c.IsInterface() {
+		panic("java.lang.IncompatibleClassChangeError")
+	}
+	method := lookupInterfaceMethod(c, this.name, this.descriptor)
+	if method == nil {
+		panic("java.lang.NoSuchMethodError")
+	}
+	if !method.isAccessibleTo(d) {
+		panic("java.lang.IllegalAccessError")
+	}
+	this.method = method
+}
