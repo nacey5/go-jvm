@@ -22,9 +22,18 @@ func newFields(class *Class, cfFields []*classfile.MemberInfo) []*Field {
 
 type Method struct {
 	ClassMember
-	maxStack  uint16
-	maxLocals uint16
-	code      []byte
+	maxStack     uint16
+	maxLocals    uint16
+	code         []byte
+	argSlotCount uint
+}
+
+func (this *Method) ArgSlotCount() uint {
+	return this.argSlotCount
+}
+
+func (this *Method) SetArgSlotCount(argSlotCount uint) {
+	this.argSlotCount = argSlotCount
 }
 
 func newMethods(class *Class, cfMethods []*classfile.MemberInfo) []*Method {
@@ -34,6 +43,7 @@ func newMethods(class *Class, cfMethods []*classfile.MemberInfo) []*Method {
 		methods[i].class = class
 		methods[i].copyMemberInfo(cfMethod)
 		methods[i].copyAttributes(cfMethod)
+		methods[i].calcArgSlotCount()
 	}
 	return methods
 }
@@ -127,4 +137,17 @@ func (this *Method) MaxLocals() uint {
 }
 func (this *Method) Code() []byte {
 	return this.code
+}
+
+func (this *Method) calcArgSlotCount() {
+	parseDescriptor := parseMethodDescriptor(this.descriptor)
+	for _, paramType := range parseDescriptor.parameterTypes {
+		this.argSlotCount++
+		if paramType == "J" || paramType == "D" {
+			this.argSlotCount++
+		}
+	}
+	if !this.IsStatic() {
+		this.argSlotCount++
+	}
 }

@@ -15,6 +15,12 @@ func newInterfaceMethodRef(cp *ConstantPool, refInfo *classfile.ConstantInterfac
 	return ref
 }
 
+func (this *InterfaceMethodRef) ResolveInterfaceMethod() *Method {
+	if this.method == nil {
+		this.resolveInterfaceMethodRef()
+	}
+	return this.method
+}
 func (this *InterfaceMethodRef) resolveInterfaceMethodRef() {
 	d := this.cp.class
 	c := this.ResolvedClass()

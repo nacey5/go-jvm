@@ -100,3 +100,10 @@ func (this *Class) getStaticMethod(name, descriptor string) *Method {
 	}
 	return nil
 }
+
+func (this *Class) GetPackageName() string {
+	if i := strings.LastIndex(this.name, "/"); i >= 0 {
+		return this.name[:i]
+	}
+	return ""
+}

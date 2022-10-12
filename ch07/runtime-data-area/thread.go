@@ -35,6 +35,9 @@ func (this *Thread) PushFrame(frame *Frame) {
 func (this *Thread) PopFrame() *Frame {
 	return this.stack.pop()
 }
+func (this *Thread) TopFrame() *Frame {
+	return this.stack.top()
+}
 
 func (this *Thread) CurrentFrame() *Frame {
 	return this.stack.pop()
