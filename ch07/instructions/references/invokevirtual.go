@@ -24,26 +24,9 @@ func (this *INVOKE_VIRTUAL) Execute(frame *runtime_data_area.Frame) {
 	ref := frame.OperandStack().GetRefFromTop(resolvedMethod.ArgSlotCount() - 1)
 	if ref != nil {
 		if methodRef.Name() == "println" {
-			stack := frame.OperandStack()
-			switch methodRef.Descriptor() {
-			case "(Z)V":
-				fmt.Printf("%v\n", stack.PopInt() != 0)
-			case "(C)V":
-				fmt.Printf("%c\n", stack.PopInt())
-			case "(I)V", "(B)V", "(S)V":
-				fmt.Printf("%v\n", stack.PopInt())
-			case "(F)V":
-				fmt.Printf("%v\n", stack.PopFloat())
-			case "(J)V":
-				fmt.Printf("%v\n", stack.PopLong())
-			case "(D)V":
-				fmt.Printf("%v\n", stack.PopDouble())
-			default:
-				panic("println: " + methodRef.Descriptor())
-			}
-			stack.PopRef()
+			_Println(frame, methodRef.Descriptor())
 		}
-		panic("")
+		panic("java.lang.NullPointerException")
 	}
 	if resolvedMethod.IsProtected() &&
 		resolvedMethod.Class().IsSuperClassOf(currentClass) &&
@@ -58,4 +41,25 @@ func (this *INVOKE_VIRTUAL) Execute(frame *runtime_data_area.Frame) {
 		panic("java.lang.AbstractMethodError")
 	}
 	base.InvokeMethod(frame, methodToBeInvoked)
+}
+
+func _Println(frame *runtime_data_area.Frame, descriptor string) {
+	stack := frame.OperandStack()
+	switch descriptor {
+	case "(Z)V":
+		fmt.Printf("%v\n", stack.PopInt() != 0)
+	case "(C)V":
+		fmt.Printf("%c\n", stack.PopInt())
+	case "(I)V", "(B)V", "(S)V":
+		fmt.Printf("%v\n", stack.PopInt())
+	case "(F)V":
+		fmt.Printf("%v\n", stack.PopFloat())
+	case "(J)V":
+		fmt.Printf("%v\n", stack.PopLong())
+	case "(D)V":
+		fmt.Printf("%v\n", stack.PopDouble())
+	default:
+		panic("println: " + descriptor)
+	}
+	stack.PopRef()
 }

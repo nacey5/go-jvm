@@ -15,6 +15,7 @@ import (
 	"go-jvm/ch07/instructions/stores"
 )
 
+// TODO 进行facaory的改进
 var (
 	nop         = &constants.NOP{}
 	aconst_null = &constants.ACONST_NULL{}
