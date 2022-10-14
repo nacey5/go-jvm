@@ -24,6 +24,14 @@ type Class struct {
 	staticVars        Slots
 }
 
+func (this *Class) SuperClass() *Class {
+	return this.superClass
+}
+
+func (this *Class) SetSuperClass(superClass *Class) {
+	this.superClass = superClass
+}
+
 func newClass(cf *classfile.ClassFile) *Class {
 	class := &Class{}
 	class.accessFlags = cf.AccessFlags()
@@ -106,4 +114,7 @@ func (this *Class) GetPackageName() string {
 		return this.name[:i]
 	}
 	return ""
+}
+func (this *Class) Name() string {
+	return this.name
 }

@@ -11,7 +11,7 @@ type INVOKE_STATIC struct {
 }
 
 // 解析静态方法
-func (this *INVOKE_STATIC) Exevute(frame runtime_data_area.Frame) {
+func (this *INVOKE_STATIC) Execute(frame *runtime_data_area.Frame) {
 	cp := frame.Method().Class().ConstantPool()
 	methodRef := cp.GetConstant(this.Index).(*heap.MethodRef)
 	resolvedMethod := methodRef.ResolvedMethod()

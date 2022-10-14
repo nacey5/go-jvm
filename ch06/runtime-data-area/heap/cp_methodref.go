@@ -25,5 +25,4 @@ func (this *MethodRef) ResolvedMethod() *Method {
 // jvms8 5.4.3.3
 func (this *MethodRef) resolveMethodRef() {
 	//class := self.Class()
-	// todo
 }

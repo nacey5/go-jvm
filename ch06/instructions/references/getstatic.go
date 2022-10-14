@@ -15,7 +15,6 @@ func (this *GET_STATIC) Execute(frame *runtime_data_area.Frame) {
 	fieldRef := cp.GetConstant(this.Index).(*heap.FieldRef)
 	field := fieldRef.ResolvedField()
 	class := field.Class()
-	// todo: init class
 
 	if !field.IsStatic() {
 		panic("java.lang.IncompatibleClassChangeError")
@@ -38,6 +37,5 @@ func (this *GET_STATIC) Execute(frame *runtime_data_area.Frame) {
 	case 'L', '[':
 		stack.PushRef(slots.GetRef(slotId))
 	default:
-		// todo
 	}
 }

@@ -33,7 +33,7 @@ func _ldc(frame *runtime_data_area.Frame, index uint) {
 		stack.PushInt(c.(int32))
 	case float32:
 		stack.PushFloat(c.(float32))
-	// todo 待完成的加载指令
+
 	// case string:
 	// case *heap.ClassRef
 	default:

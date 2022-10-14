@@ -25,7 +25,7 @@ type LRETURN struct {
 	base.NoOperandsInstruction
 }
 
-func (this *RETURN) Eexcute(frame runtime_data_area.Frame) {
+func (this *RETURN) Execute(frame *runtime_data_area.Frame) {
 	frame.Thread().PopFrame()
 }
 

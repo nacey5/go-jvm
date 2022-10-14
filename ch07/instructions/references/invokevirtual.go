@@ -18,13 +18,14 @@ func (this *INVOKE_VIRTUAL) Execute(frame *runtime_data_area.Frame) {
 	cp := currentClass.ConstantPool()
 	methodRef := cp.GetConstant(this.Index).(*heap.MethodRef)
 	resolvedMethod := methodRef.ResolvedMethod()
-	if resolvedMethod.IsAbstract() {
+	if resolvedMethod.IsStatic() {
 		panic("java.lang.IncompatibleClassChangeError")
 	}
 	ref := frame.OperandStack().GetRefFromTop(resolvedMethod.ArgSlotCount() - 1)
-	if ref != nil {
+	if ref == nil {
 		if methodRef.Name() == "println" {
-			_Println(frame, methodRef.Descriptor())
+			_Println(frame.OperandStack(), methodRef.Descriptor())
+			return
 		}
 		panic("java.lang.NullPointerException")
 	}
@@ -43,8 +44,7 @@ func (this *INVOKE_VIRTUAL) Execute(frame *runtime_data_area.Frame) {
 	base.InvokeMethod(frame, methodToBeInvoked)
 }
 
-func _Println(frame *runtime_data_area.Frame, descriptor string) {
-	stack := frame.OperandStack()
+func _Println(stack *runtime_data_area.OperandStack, descriptor string) {
 	switch descriptor {
 	case "(Z)V":
 		fmt.Printf("%v\n", stack.PopInt() != 0)

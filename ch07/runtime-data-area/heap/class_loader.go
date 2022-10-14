@@ -10,15 +10,17 @@ import (
 // cp字段保存ClassPath指针
 // classMap保存已经加载的类数据
 type ClassLoader struct {
-	cp       *classpath.Classpath
-	classMap map[string]*Class
+	cp          *classpath.Classpath
+	verboseFlag bool
+	classMap    map[string]*Class
 }
 
 // 创建classLoader实例
-func NewClassLoader(cp *classpath.Classpath) *ClassLoader {
+func NewClassLoader(cp *classpath.Classpath, verboseClass bool) *ClassLoader {
 	return &ClassLoader{
-		cp:       cp,
-		classMap: make(map[string]*Class),
+		cp:          cp,
+		verboseFlag: verboseClass,
+		classMap:    make(map[string]*Class),
 	}
 }
 
@@ -36,7 +38,9 @@ func (this *ClassLoader) loadNonArrayClass(name string) *Class {
 	data, entry := this.readClass(name)
 	class := this.defineClass(data)
 	link(class)
-	fmt.Printf("[Loaded %s from %s]\n", name, entry)
+	if this.verboseFlag {
+		fmt.Printf("[Loaded %s from %s]\n", name, entry)
+	}
 	return class
 }
 

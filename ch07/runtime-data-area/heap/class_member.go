@@ -53,7 +53,7 @@ func (this *ClassMember) isAccessibleTo(d *Class) bool {
 	}
 	c := this.class
 	if this.IsProtected() {
-		return d == c || d.isSubClassOf(c) || c.getPackageName() == d.getPackageName()
+		return d == c || d.IsSubClassOf(c) || c.getPackageName() == d.getPackageName()
 	}
 	if !this.IsPrivate() {
 		return c.getPackageName() == d.getPackageName()
