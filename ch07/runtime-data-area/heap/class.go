@@ -22,6 +22,7 @@ type Class struct {
 	instanceSlotCount uint
 	staticSlotCount   uint
 	staticVars        Slots
+	initStarted       bool
 }
 
 func (this *Class) SuperClass() *Class {
@@ -117,4 +118,14 @@ func (this *Class) GetPackageName() string {
 }
 func (this *Class) Name() string {
 	return this.name
+}
+func (this *Class) InitStarted() bool {
+	return this.initStarted
+}
+func (this *Class) StartInit() {
+	this.initStarted = true
+}
+
+func (this *Class) GetClinitMethod() *Method {
+	return this.getStaticMethod("<clinit>", "()V")
 }

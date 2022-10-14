@@ -18,5 +18,11 @@ func (this *INVOKE_STATIC) Execute(frame *runtime_data_area.Frame) {
 	if !resolvedMethod.IsStatic() {
 		panic("java.lang.IncompatibleClassChangeError")
 	}
+	class := resolvedMethod.Class()
+	if !class.InitStarted() {
+		frame.RevertNextPc()
+		base.InitClass(frame.Thread(), class)
+		return
+	}
 	base.InvokeMethod(frame, resolvedMethod)
 }

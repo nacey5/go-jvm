@@ -15,8 +15,11 @@ func (this *GET_STATIC) Execute(frame *runtime_data_area.Frame) {
 	fieldRef := cp.GetConstant(this.Index).(*heap.FieldRef)
 	field := fieldRef.ResolvedField()
 	class := field.Class()
-	// todo: init class
-
+	if !class.InitStarted() {
+		frame.RevertNextPc()
+		base.InitClass(frame.Thread(), class)
+		return
+	}
 	if !field.IsStatic() {
 		panic("java.lang.IncompatibleClassChangeError")
 	}

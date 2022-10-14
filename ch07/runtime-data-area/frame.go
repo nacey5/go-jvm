@@ -70,3 +70,8 @@ func NewFrame(thread *Thread, method *heap.Method) *Frame {
 func (this *Frame) Method() *heap.Method {
 	return this.method
 }
+
+// 当前的nextPc已经指向了下一个帧，由于正在进行初始化，必须将指针指向当前的指令
+func (this *Frame) RevertNextPc() {
+	this.nextPC = this.thread.pc
+}

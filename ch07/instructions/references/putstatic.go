@@ -17,6 +17,12 @@ func (this *PUT_STATIC) Execute(frame *runtime_data_area.Frame) {
 	fieldRef := cp.GetConstant(this.Index).(*heap.FieldRef)
 	field := fieldRef.ResolvedField()
 	class := field.Class()
+	//如果还没有初始化的话
+	if !class.InitStarted() {
+		frame.RevertNextPc()
+		base.InitClass(frame.Thread(), class)
+		return
+	}
 	//先拿到当前的方法，常量池，然后解析符号
 	if !field.IsStatic() {
 		panic("java.lang.IncompatibleClassChangeError")
