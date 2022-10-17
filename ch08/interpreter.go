@@ -15,6 +15,7 @@ func interpret(method *heap.Method, logInst bool) {
 	thread := runtime_data_area.NewThread()
 	frame := thread.NewFrame(method)
 	thread.PushFrame(frame)
+
 	defer catchErr(thread)
 	loop(thread, logInst)
 }
