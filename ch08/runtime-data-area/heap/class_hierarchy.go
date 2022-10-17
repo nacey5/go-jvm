@@ -6,11 +6,39 @@ func (this *Class) isAssignableFrom(other *Class) bool {
 	if s == t {
 		return true
 	}
-	if !t.IsInterface() {
-		return s.IsSubClassOf(t)
+	//如果s不是数组
+	if !s.IsArray() {
+		//s类不是接口
+		if !s.IsInterface() {
+			//t不是接口
+			if !t.IsInterface() {
+				return s.IsSubClassOf(t)
+			} else {
+				return s.IsImplements(t)
+			}
+		} else {
+			if t.IsInterface() {
+				return t.isJlObject()
+			} else {
+				return t.isSuperInterfaceOf(s)
+			}
+		}
 	} else {
-		return s.IsImplements(t)
+		if !t.IsArray() {
+			if !t.IsInterface() {
+				return t.isJlObject()
+			} else {
+				return t.isJlCloneable() || t.isJioSerializable()
+			}
+		} else {
+			sc := s.ComponentClass()
+			tc := t.ComponentClass()
+			return sc == tc || tc.isAssignableFrom(sc)
+		}
 	}
+
+	return false
+
 }
 
 func (this *Class) IsSubClassOf(other *Class) bool {

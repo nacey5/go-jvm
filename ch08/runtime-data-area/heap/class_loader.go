@@ -30,6 +30,9 @@ func (this *ClassLoader) LoadClass(name string) *Class {
 	if class, ok := this.classMap[name]; ok {
 		return class
 	}
+	if name[0] == '[' {
+		return this.loadArrayClass(name)
+	}
 	return this.loadNonArrayClass(name)
 }
 
@@ -59,6 +62,23 @@ func (this *ClassLoader) defineClass(data []byte) *Class {
 	resolveSuperClass(class)
 	resolveInterfaces(class)
 	this.classMap[class.name] = class
+	return class
+}
+
+func (this *ClassLoader) loadArrayClass(name string) *Class {
+	class := &Class{
+		accessFlags: ACC_PUBLIC,
+		name:        name,
+		loader:      this,
+		//数组类不需要初始化，所以需要把是否已经初始化的标志设置为true
+		initStarted: true,
+		superClass:  this.LoadClass("java/lang/Object"),
+		interfaces: []*Class{
+			this.LoadClass("java/lang/Cloneable"),
+			this.LoadClass("java/io/Serializable"),
+		},
+	}
+	this.classMap[name] = class
 	return class
 }
 

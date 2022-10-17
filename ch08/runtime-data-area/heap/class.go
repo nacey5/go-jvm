@@ -133,3 +133,27 @@ func (this *Class) GetClinitMethod() *Method {
 func (this *Class) IsArray() bool {
 	return this.name[0] == '['
 }
+
+func (this *Class) Loader() *ClassLoader {
+	return this.loader
+}
+func (this *Class) ArrayClass() *Class {
+	arrayClassName := getArrayClassName(this.name)
+	return this.loader.LoadClass(arrayClassName)
+}
+
+func (this *Class) isJlObject() bool {
+	return this.name == "java/lang/Object"
+}
+
+func (this *Class) isSuperInterfaceOf(iface *Class) bool {
+	return iface.isSubInterfaceOf(this)
+}
+
+func (this *Class) isJlCloneable() bool {
+	return this.name == "java/lang/Cloneable"
+}
+
+func (this *Class) isJioSerializable() bool {
+	return this.name == "java/io/Serializable"
+}
