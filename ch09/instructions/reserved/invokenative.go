@@ -4,6 +4,7 @@ import (
 	"go-jvm/ch09/instructions/base"
 	"go-jvm/ch09/native"
 	_ "go-jvm/ch09/native/java/lang"
+	_ "go-jvm/ch09/native/sun/misc"
 	"go-jvm/ch09/runtime_data_area"
 )
 

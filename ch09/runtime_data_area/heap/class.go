@@ -167,3 +167,21 @@ func (this *Class) ArrayClass() *Class {
 func (this *Class) JavaName() string {
 	return strings.Replace(this.name, "/", ".", -1)
 }
+
+func (this *Class) IsPrimitive() bool {
+	_, ok := primitiveTypes[this.name]
+	return ok
+}
+
+func (this *Class) GetInstanceMethod(name, descriptor string) *Method {
+	return this.getMethod(name, descriptor, false)
+}
+
+func (this *Class) GetRefVar(fieldName, fieldDescriptor string) *Object {
+	field := this.getField(fieldName, fieldDescriptor, true)
+	return this.staticVars.GetRef(field.slotId)
+}
+func (this *Class) SetRefVar(fieldName, fieldDescriptor string, ref *Object) {
+	field := this.getField(fieldName, fieldDescriptor, true)
+	this.staticVars.SetRef(field.slotId, ref)
+}
