@@ -19,6 +19,15 @@ type Class struct {
 	staticSlotCount   uint
 	staticVars        Slots
 	initStarted       bool
+	jClass            *Object //java.lang.Class实例
+}
+
+func (this *Class) JClass() *Object {
+	return this.jClass
+}
+
+func (this *Class) SetJClass(jClass *Object) {
+	this.jClass = jClass
 }
 
 func newClass(cf *classfile.ClassFile) *Class {

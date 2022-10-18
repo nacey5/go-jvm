@@ -1,6 +1,5 @@
 package base
 
-import "fmt"
 import "go-jvm/ch09/runtime_data_area"
 import "go-jvm/ch09/runtime_data_area/heap"
 
@@ -17,13 +16,4 @@ func InvokeMethod(invokerFrame *runtime_data_area.Frame, method *heap.Method) {
 		}
 	}
 
-	// hack!
-	if method.IsNative() {
-		if method.Name() == "registerNatives" {
-			thread.PopFrame()
-		} else {
-			panic(fmt.Sprintf("native method: %v.%v%v\n",
-				method.Class().Name(), method.Name(), method.Descriptor()))
-		}
-	}
 }

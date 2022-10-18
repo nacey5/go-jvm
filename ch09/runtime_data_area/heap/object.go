@@ -3,6 +3,15 @@ package heap
 type Object struct {
 	class *Class
 	data  interface{} // Slots for Object, []int32 for int[] ...
+	extra interface{}
+}
+
+func (this *Object) Extra() interface{} {
+	return this.extra
+}
+
+func (this *Object) SetExtra(extra interface{}) {
+	this.extra = extra
 }
 
 // create normal (non-array) object

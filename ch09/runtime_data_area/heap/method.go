@@ -13,13 +13,22 @@ type Method struct {
 func newMethods(class *Class, cfMethods []*classfile.MemberInfo) []*Method {
 	methods := make([]*Method, len(cfMethods))
 	for i, cfMethod := range cfMethods {
-		methods[i] = &Method{}
-		methods[i].class = class
-		methods[i].copyMemberInfo(cfMethod)
-		methods[i].copyAttributes(cfMethod)
-		methods[i].calcArgSlotCount()
+		methods[i] = newMethod(class, cfMethod)
 	}
 	return methods
+}
+
+func newMethod(class *Class, cfMethod *classfile.MemberInfo) *Method {
+	method := &Method{}
+	method.class = class
+	method.copyMemberInfo(cfMethod)
+	method.copyAttributes(cfMethod)
+	md := parseMethodDescriptor(method.descriptor)
+	method.calcArgSlotCount(md.parameterTypes)
+	if method.IsNative() {
+		method.injectCodeAttribute(md.returnType)
+	}
+	return method
 }
 
 func (this *Method) copyAttributes(cfMethod *classfile.MemberInfo) {
@@ -30,9 +39,9 @@ func (this *Method) copyAttributes(cfMethod *classfile.MemberInfo) {
 	}
 }
 
-func (this *Method) calcArgSlotCount() {
-	parsedDescriptor := parseMethodDescriptor(this.descriptor)
-	for _, paramType := range parsedDescriptor.parameterTypes {
+// todo 更改但不知有无错误
+func (this *Method) calcArgSlotCount(paramTypes []string) {
+	for _, paramType := range paramTypes {
 		this.argSlotCount++
 		if paramType == "J" || paramType == "D" {
 			this.argSlotCount++
@@ -74,4 +83,23 @@ func (this *Method) Code() []byte {
 }
 func (this *Method) ArgSlotCount() uint {
 	return this.argSlotCount
+}
+
+func (this *Method) injectCodeAttribute(returnType string) {
+	this.maxStack = 4
+	this.maxLocals = this.argSlotCount
+	switch returnType[0] {
+	case 'V':
+		this.code = []byte{0xfe, 0xb1} //return
+	case 'D':
+		this.code = []byte{0xfe, 0xaf} //dreturn
+	case 'F':
+		this.code = []byte{0xfe, 0xae} //freturn
+	case 'J':
+		this.code = []byte{0xfe, 0xad} //lreturn
+	case 'L', '[':
+		this.code = []byte{0xfe, 0xb0} //areturn
+	default:
+		this.code = []byte{0xfe, 0xac} //ireturn
+	}
 }

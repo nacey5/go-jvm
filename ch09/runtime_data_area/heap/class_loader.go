@@ -18,25 +18,37 @@ type ClassLoader struct {
 }
 
 func NewClassLoader(cp *classpath.Classpath, verboseFlag bool) *ClassLoader {
-	return &ClassLoader{
+	loader := &ClassLoader{
 		cp:          cp,
 		verboseFlag: verboseFlag,
 		classMap:    make(map[string]*Class),
 	}
+	//让加载到方法区中的每一个类都有一个关联对象
+	loader.loadBasicClasses()
+	//加载原始化类
+	loader.loadPrimitiveClasses()
+	return loader
 }
 
+// 加载每一个类的关联对象
 func (this *ClassLoader) LoadClass(name string) *Class {
 	if class, ok := this.classMap[name]; ok {
 		// already loaded
 		return class
 	}
 
-	if name[0] == '[' {
-		// array class
-		return this.loadArrayClass(name)
+	var class *Class
+	if name[0] == '[' { //array class
+		class = this.loadArrayClass(name)
+	} else {
+		class = this.loadNonArrayClass(name)
 	}
 
-	return this.loadNonArrayClass(name)
+	if jClassClass, ok := this.classMap["java/lang/Class"]; ok {
+		class.jClass = jClassClass.NewObject()
+		class.jClass.extra = class
+	}
+	return class
 }
 
 func (this *ClassLoader) loadArrayClass(name string) *Class {
@@ -83,6 +95,34 @@ func (this *ClassLoader) defineClass(data []byte) *Class {
 	resolveInterfaces(class)
 	this.classMap[class.name] = class
 	return class
+}
+
+func (this *ClassLoader) loadBasicClasses() {
+	jlClassClass := this.LoadClass("java/lang/Class")
+	for _, class := range this.classMap {
+		class.jClass = jlClassClass.NewObject()
+		class.jClass.extra = class
+	}
+}
+
+func (this *ClassLoader) loadPrimitiveClasses() {
+	for primitiveType, _ := range primitiveTypes {
+		//primitive是void ，int,float,等
+		this.loadPrimitiveClass(primitiveType)
+	}
+}
+
+// 将类相关绑定的初始化类绑定到map中
+func (this *ClassLoader) loadPrimitiveClass(className string) {
+	class := &Class{
+		accessFlags: ACC_PUBLIC,
+		name:        className,
+		loader:      this,
+		initStarted: true,
+	}
+	class.jClass = this.classMap["java/lang/Class"].NewObject()
+	class.jClass.extra = class
+	this.classMap[className] = class
 }
 
 func parseClass(data []byte) *Class {
