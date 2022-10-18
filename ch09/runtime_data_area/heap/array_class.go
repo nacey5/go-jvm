@@ -15,22 +15,22 @@ func (this *Class) NewArray(count uint) *Object {
 	}
 	switch this.Name() {
 	case "[Z":
-		return &Object{this, make([]int8, count)}
+		return &Object{this, make([]int8, count), nil}
 	case "[B":
-		return &Object{this, make([]int8, count)}
+		return &Object{this, make([]int8, count), nil}
 	case "[C":
-		return &Object{this, make([]uint16, count)}
+		return &Object{this, make([]uint16, count), nil}
 	case "[S":
-		return &Object{this, make([]int16, count)}
+		return &Object{this, make([]int16, count), nil}
 	case "[I":
-		return &Object{this, make([]int32, count)}
+		return &Object{this, make([]int32, count), nil}
 	case "[J":
-		return &Object{this, make([]int64, count)}
+		return &Object{this, make([]int64, count), nil}
 	case "[F":
-		return &Object{this, make([]float32, count)}
+		return &Object{this, make([]float32, count), nil}
 	case "[D":
-		return &Object{this, make([]float64, count)}
+		return &Object{this, make([]float64, count), nil}
 	default:
-		return &Object{this, make([]*Object, count)}
+		return &Object{this, make([]*Object, count), nil}
 	}
 }
