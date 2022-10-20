@@ -193,3 +193,7 @@ func (this *Class) SetRefVar(fieldName, fieldDescriptor string, ref *Object) {
 	field := this.getField(fieldName, fieldDescriptor, true)
 	this.staticVars.SetRef(field.slotId, ref)
 }
+
+func (this *Class) GetStaticMethod(name, descriptor string) *Method {
+	return this.getMethod(name, descriptor, true)
+}

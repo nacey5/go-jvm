@@ -6,14 +6,7 @@ import "go-jvm/ch11/instructions/base"
 import "go-jvm/ch11/runtime_data_area"
 import "go-jvm/ch11/runtime_data_area/heap"
 
-func interpret(method *heap.Method, logInst bool, args []string) {
-	thread := runtime_data_area.NewThread()
-	frame := thread.NewFrame(method)
-	thread.PushFrame(frame)
-
-	jArgs := createArgsArray(method.Class().Loader(), args)
-	frame.LocalVars().SetRef(0, jArgs)
-
+func interpret(thread *runtime_data_area.Thread, logInst bool) {
 	defer catchErr(thread)
 	loop(thread, logInst)
 }

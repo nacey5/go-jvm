@@ -48,3 +48,10 @@ func checkArrayCopy(src, dest *heap.Object) bool {
 	}
 	return true
 }
+
+// private static native void setOut0(PrintStream out);
+func setOut0(frame *runtime_data_area.Frame) {
+	out := frame.LocalVars().GetRef(0)
+	sysClass := frame.Method().Class()
+	sysClass.SetRefVar("out", "Ljava/io/PrintStream;", out)
+}
