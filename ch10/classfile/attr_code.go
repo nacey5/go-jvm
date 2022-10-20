@@ -82,3 +82,13 @@ func (this *ExceptionTableEntry) HandlerPc() uint16 {
 func (this *ExceptionTableEntry) CatchType() uint16 {
 	return this.catchType
 }
+
+func (this *CodeAttribute) LineNumberTableAttribute() *LineNumberTableAttribute {
+	for _, attrInfo := range this.attributes {
+		switch attrInfo.(type) {
+		case *LineNumberTableAttribute:
+			return attrInfo.(*LineNumberTableAttribute)
+		}
+	}
+	return nil
+}

@@ -94,3 +94,10 @@ func (this *OperandStack) PushBoolean(val bool) {
 func (this *OperandStack) PopBoolean() bool {
 	return this.PopInt() == 1
 }
+
+func (this *OperandStack) Clear() {
+	this.size = 0
+	for i := range this.slots {
+		this.slots[i].ref = nil
+	}
+}

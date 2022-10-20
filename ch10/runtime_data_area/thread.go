@@ -52,3 +52,11 @@ func (this *Thread) IsStackEmpty() bool {
 func (this *Thread) NewFrame(method *heap.Method) *Frame {
 	return newFrame(this, method)
 }
+
+func (this *Thread) ClearStack() {
+	this.stack.clear()
+}
+
+func (this *Thread) GetFrames() []*Frame {
+	return this.stack.getFrames()
+}

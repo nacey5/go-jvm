@@ -4,10 +4,20 @@ import "go-jvm/ch10/classfile"
 
 type Method struct {
 	ClassMember
-	maxStack     uint
-	maxLocals    uint
-	code         []byte
-	argSlotCount uint
+	maxStack        uint
+	maxLocals       uint
+	code            []byte
+	argSlotCount    uint
+	exceptionTable  ExceptionTable
+	lineNumberTable *classfile.LineNumberTableAttribute
+}
+
+func (this *Method) LineNumberTable() *classfile.LineNumberTableAttribute {
+	return this.lineNumberTable
+}
+
+func (this *Method) SetLineNumberTable(lineNumberTable *classfile.LineNumberTableAttribute) {
+	this.lineNumberTable = lineNumberTable
 }
 
 func newMethods(class *Class, cfMethods []*classfile.MemberInfo) []*Method {
@@ -36,6 +46,8 @@ func (this *Method) copyAttributes(cfMethod *classfile.MemberInfo) {
 		this.maxStack = codeAttr.MaxStack()
 		this.maxLocals = codeAttr.MaxLocals()
 		this.code = codeAttr.Code()
+		this.lineNumberTable = codeAttr.LineNumberTableAttribute()
+		this.exceptionTable = newExceptionTable(codeAttr.ExceptionTable(), this.class.constantPool)
 	}
 }
 
@@ -101,4 +113,22 @@ func (this *Method) Code() []byte {
 }
 func (this *Method) ArgSlotCount() uint {
 	return this.argSlotCount
+}
+
+func (this *Method) FindExceptionHandler(exClass *Class, pc int) int {
+	handler := this.exceptionTable.findExceptionHandler(exClass, pc)
+	if handler != nil {
+		return handler.handlerPc
+	}
+	return -1
+}
+
+func (this *Method) GetLineNumber(pc int) int {
+	if this.IsNative() {
+		return -2
+	}
+	if this.lineNumberTable == nil {
+		return -1
+	}
+	return this.lineNumberTable.GetLineNumber(pc)
 }
