@@ -3,6 +3,7 @@ package io
 import (
 	"go-jvm/ch11/runtime_data_area"
 	"os"
+	"unsafe"
 )
 
 // private native void writeBytes(byte b[],int off,int len,boolean append)
@@ -17,4 +18,10 @@ func writeBytes(frame runtime_data_area.Frame) {
 	goBytes := castInt8sToUint8s(jBytes)
 	goBytes = goBytes[off : off+len]
 	os.Stdout.Write(goBytes)
+}
+
+func castInt8sToUint8s(jBytes []int8) (goBytes []byte) {
+	ptr := unsafe.Pointer(&jBytes)
+	goBytes = *((*[]byte)(ptr))
+	return
 }

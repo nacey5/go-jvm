@@ -101,3 +101,8 @@ func (this *OperandStack) Clear() {
 		this.slots[i].ref = nil
 	}
 }
+
+// todo
+func NewOperandStack(maxStack uint) *OperandStack {
+	return newOperandStack(maxStack)
+}

@@ -5,7 +5,6 @@
 -Xjre
 "F:\profes-software\JDK\java_tree"
 -cp
-"E:\go_project\go-jvm\ch10\javam"
-ParseIntTest
-123
+"E:\go_project\go-jvm\ch11\javam"
+HelloWorld
 ```

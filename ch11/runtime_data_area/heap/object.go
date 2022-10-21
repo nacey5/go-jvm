@@ -43,3 +43,7 @@ func (this *Object) SetRefVar(name, descriptor string, ref *Object) {
 	slots := this.data.(Slots)
 	slots.SetRef(field.slotId, ref)
 }
+
+func (this *Object) Data() interface{} {
+	return this.data
+}

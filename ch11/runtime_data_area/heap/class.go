@@ -197,3 +197,8 @@ func (this *Class) SetRefVar(fieldName, fieldDescriptor string, ref *Object) {
 func (this *Class) GetStaticMethod(name, descriptor string) *Method {
 	return this.getMethod(name, descriptor, true)
 }
+
+// getters
+func (this *Class) AccessFlags() uint16 {
+	return this.accessFlags
+}
